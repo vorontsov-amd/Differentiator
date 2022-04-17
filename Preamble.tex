@@ -1,0 +1,108 @@
+\documentclass[a4paper,12pt]{article} % добавить leqno в [] для нумерации слева
+\usepackage[a4paper,top=1.3cm,bottom=2cm,left=1.5cm,right=1.5cm,marginparwidth=0.75cm]{geometry}
+\usepackage{cmap}					% поиск в PDF
+\usepackage[warn]{mathtext} 		% русские буквы в фомулах
+\usepackage[T2A]{fontenc}			% кодировка
+\usepackage[utf8]{inputenc}			% кодировка исходного текста
+\usepackage[english,russian]{babel}	% локализация и переносы
+\usepackage{physics}
+\usepackage{multirow}
+\allowdisplaybreaks
+
+%%% Нормальное размещение таблиц (писать [H] в окружении таблицы)
+\usepackage{float}
+\restylefloat{table}
+
+
+
+\usepackage{graphicx}
+
+\usepackage{wrapfig}
+\usepackage{tabularx}
+
+\usepackage{hyperref}
+\usepackage[rgb]{xcolor}
+\hypersetup{
+	colorlinks=true,urlcolor=blue
+}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+
+%% Шрифты
+\usepackage{euscript}	 % Шрифт Евклид
+\usepackage{mathrsfs} % Красивый матшрифт
+
+%% Свои команды
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\date{\today}
+
+\usepackage{gensymb}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		{\large МОСКОВСКИЙ ФИЗИКО-ТЕХНИЧЕСКИЙ ИНСТИТУТ (НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ)}
+	\end{center}
+	\begin{center}
+		{\large Физтех-школа радиотехники и компьютерных технологий}
+	\end{center}
+	
+	
+	\vspace{4.5cm}
+	{\huge
+		\begin{center}
+			{\bf Отчёт о выполнении лабораторной работы 2.2.8}\\
+			Практика взятия производной сложной фукции
+		\end{center}
+	}
+	\vspace{2cm}
+	\begin{flushright}
+		{\LARGE Автор:\\ Воронцов Амадей Александрович \\
+			\vspace{0.2cm}
+			Б01-102}
+	\end{flushright}
+	\vspace{8cm}
+	\begin{center}
+		Долгопрудный\\
+		\today
+	\end{center}
+\end{titlepage}
+
+\section{Дисклеймер}
+Данная статья не рекомендуется к прочтению лиц младше 18 лет, либо не сдавшим коллоквиум студентам первого курса. Приведенная информация является сугубо мнением автора. Данная статья может задеть ваши чувства, связанные с этикой и нормами вашей жизни, поэтому просим всех гуманнитариев убрать глаза от экрана. 
+
+\section{Введение}
+\textbf{Цель работы:}  \begin{enumerate}
+	\item изучить алгоритм взятия производной сложной функции
+	\item бесполезно потратить своё время
+\end{enumerate}
+
+\textbf{В работе используются:} ручка, бумага, мозги
+\section{Теоретические сведения}
+\textbf{Определение:} Производной функции $f$ называется предел $ \lim_{x\to\infty} \frac{f(x) - f(x_0)}{x - x_0}$, если этот предел конечен, либо равен $+ \infty \text{ или} - \infty$. Обозначается этот предел $f'(x_0)$.
+\newline
+\textbf{Теорема 1:} Пусть функции $f$ и $g$ имеют конечные производные в точке $x_0$. Тогда функции $f + g, f \cdot g, \frac{f}{g}$ имеют производные в точке $x_0.$ (В последнем случае нужно требовать, чтобы $g'(x_0) \neq 0 $), причем в точке $x_0$ выполняются равенства
+
+$$    \left( f(x) + g(x) \right)' = f'(x) + g'(x) $$
+$$    \left( f(x)g(x) \right)' = f'(x)g(x) + f(x)g'(x) $$
+$$    \left( \frac{f(x)}{g(x)} \right)' = \frac{f'(x)g(x) - f(x)g'(x)}{g^2(x)} $$
+\newline
+\textbf{Теорема 2:} Пусть функция $f$ имеет конечную производную в точке $x_0$, а функция $g$ имеет конечную производную в точке $u_0 = f(x_0)$. Тогда функция $h(x) = g(f(x))$ имеет производную в точке $x_0$, причем $h'(x_0) = g'(u_0)f'(x_0)$
+
+\section{Ход работы}
+
+\textbf{Задача:} найти 

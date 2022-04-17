@@ -1,0 +1,142 @@
+\documentclass[a4paper,12pt]{article} % добавить leqno в [] для нумерации слева
+\usepackage[a4paper,top=1.3cm,bottom=2cm,left=1.5cm,right=1.5cm,marginparwidth=0.75cm]{geometry}
+\usepackage{cmap}					% поиск в PDF
+\usepackage[warn]{mathtext} 		% русские буквы в фомулах
+\usepackage[T2A]{fontenc}			% кодировка
+\usepackage[utf8]{inputenc}			% кодировка исходного текста
+\usepackage[english,russian]{babel}	% локализация и переносы
+\usepackage{physics}
+\usepackage{multirow}
+\allowdisplaybreaks
+
+%%% Нормальное размещение таблиц (писать [H] в окружении таблицы)
+\usepackage{float}
+\restylefloat{table}
+
+
+
+\usepackage{graphicx}
+
+\usepackage{wrapfig}
+\usepackage{tabularx}
+
+\usepackage{hyperref}
+\usepackage[rgb]{xcolor}
+\hypersetup{
+	colorlinks=true,urlcolor=blue
+}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+
+%% Шрифты
+\usepackage{euscript}	 % Шрифт Евклид
+\usepackage{mathrsfs} % Красивый матшрифт
+
+%% Свои команды
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\date{\today}
+
+\usepackage{gensymb}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		{\large МОСКОВСКИЙ ФИЗИКО-ТЕХНИЧЕСКИЙ ИНСТИТУТ (НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ)}
+	\end{center}
+	\begin{center}
+		{\large Физтех-школа радиотехники и компьютерных технологий}
+	\end{center}
+	
+	
+	\vspace{4.5cm}
+	{\huge
+		\begin{center}
+			{\bf Отчёт о выполнении лабораторной работы 2.2.8}\\
+			Практика взятия производной сложной фукции
+		\end{center}
+	}
+	\vspace{2cm}
+	\begin{flushright}
+		{\LARGE Автор:\\ Воронцов Амадей Александрович \\
+			\vspace{0.2cm}
+			Б01-102}
+	\end{flushright}
+	\vspace{8cm}
+	\begin{center}
+		Долгопрудный\\
+		\today
+	\end{center}
+\end{titlepage}
+
+\section{Дисклеймер}
+Данная статья не рекомендуется к прочтению лиц младше 18 лет, либо не сдавшим коллоквиум студентам первого курса. Приведенная информация является сугубо мнением автора. Данная статья может задеть ваши чувства, связанные с этикой и нормами вашей жизни, поэтому просим всех гуманнитариев убрать глаза от экрана. 
+
+\section{Введение}
+\textbf{Цель работы:}  \begin{enumerate}
+	\item изучить алгоритм взятия производной сложной функции
+	\item бесполезно потратить своё время
+\end{enumerate}
+
+\textbf{В работе используются:} ручка, бумага, мозги
+\section{Теоретические сведения}
+\textbf{Определение:} Производной функции $f$ называется предел $ \lim_{x\to\infty} \frac{f(x) - f(x_0)}{x - x_0}$, если этот предел конечен, либо равен $+ \infty \text{ или} - \infty$. Обозначается этот предел $f'(x_0)$.
+\newline
+\textbf{Теорема 1:} Пусть функции $f$ и $g$ имеют конечные производные в точке $x_0$. Тогда функции $f + g, f \cdot g, \frac{f}{g}$ имеют производные в точке $x_0.$ (В последнем случае нужно требовать, чтобы $g'(x_0) \neq 0 $), причем в точке $x_0$ выполняются равенства
+
+$$    \left( f(x) + g(x) \right)' = f'(x) + g'(x) $$
+$$    \left( f(x)g(x) \right)' = f'(x)g(x) + f(x)g'(x) $$
+$$    \left( \frac{f(x)}{g(x)} \right)' = \frac{f'(x)g(x) - f(x)g'(x)}{g^2(x)} $$
+\newline
+\textbf{Теорема 2:} Пусть функция $f$ имеет конечную производную в точке $x_0$, а функция $g$ имеет конечную производную в точке $u_0 = f(x_0)$. Тогда функция $h(x) = g(f(x))$ имеет производную в точке $x_0$, причем $h'(x_0) = g'(u_0)f'(x_0)$
+
+\section{Ход работы}
+
+\textbf{Задача:} найти 
+$ \left( \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)}\right) \cos \left( x\right) \right)'$ 
+ \newline 
+\text{Как легко видеть, } $ \left| \oplus_{k \in S} \left( \mathfrak{K}^{F^{\alpha}(i)} \right) \right| \preceq \mathfrak{N}_1 \text{ при } {\lfloor \mathfrak{H} \rfloor}_W \cap F^{\alpha}(\mathbb{N}) \neq \varnothing \text{ поэтому } $\newline $$ \left( \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)}\right) \cos \left( x\right) \right)' =  \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)} \right)' \cdot \left( \cos \left( x\right) \right) +  \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)} \right) \cdot \left( \cos \left( x\right) \right)'$$
+ \newline 
+Следующее утверждение представляет собой перефомулировку предложения 5.3.18, которое вытекает из теоремы 7.1.24, основанной на лемме 2.4.14, являющейся следствием из теоремы 7.1.24 и предложение 5.3.18\newline $$ \left( \cos \left( x\right) \right)' = - \sin \left( x\right) \cdot  \left( x \right)'$$
+ \newline 
+Очевидно, что\newline $$ \left( x \right)' = 1$$
+ \newline 
+Утвеверждение вытекает из результата приведенного в [1].[1] К. А. Който (ред.) Югославское математическое общество. Заседание 2. 1925. Сборник рукописей внесекционных докладов. Стр 17.\newline $$ \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)} \right)' = \frac{ \left(  x^{ \sin \left( x\right)} \right)' \cdot \left( \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right) \right) -  \left(  x^{ \sin \left( x\right)} \right) \cdot \left( \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right) \right)'}{ \left( \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right) \right)^2}$$
+ \newline 
+Обоснование выссказывание имеется на стр. 478 в [2].[2] Аут Оф Пейпер. Теория нумераций. М.Каунтер, 1990. 396 с.\newline $$ \left( \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right) \right)' =  \frac{ \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x} \right)'}{  \cos \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)^{ 2}}$$
+ \newline 
+Заинтересованный читатель может найти доказательство этого результата на домашней странице У. Узлера: Error 404 Page not found\newline $$ \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x} \right)' =  \left( \left(  3 x\right)^{ 4} \right)' \cdot \left(  2^{ x} \right) +  \left( \left(  3 x\right)^{ 4} \right) \cdot \left(  2^{ x} \right)'$$
+ \newline 
+Подробное обоснование будет рассмотрена в главе 7 после развития соответствующей теории\newline $$ \left(  2^{ x} \right)' =  \left(  2^{ x} \right) \cdot \ln \left( 2\right) \cdot  \left( x \right)'$$
+ \newline 
+Глава 7: Ради простоты предположим, что z = 0 (Общий случай рассмотрен в приложении 2)\newline $$ \left( \left(  3 x\right)^{ 4} \right)' = 4 \cdot \left(  3 x \right) ^ 3 \cdot  \left(  3 x \right)'$$
+ \newline 
+Приложение 2: Формальное доказательство выходит за рамки данной монографии\newline $$ \left(  3 x \right)' =  \left( 3 \right)' \cdot \left( x \right) +  \left( 3 \right) \cdot \left( x \right)'$$
+ \newline 
+Читатель, которому не похуй, мог заметить, что\newline $$ \left( x \right)' = 1$$
+ \newline 
+Если мысли сходятся, то они ограничены\newline $$ \left( 3 \right)' = 0$$
+ \newline 
+Для любого эпсилон больше нуля - фупм хуйня\newline $$ \left(  x^{ \sin \left( x\right)} \right)' =   x^{ \sin \left( x\right)} \cdot \left( \left( \sin \left( x\right) \right)' \cdot  \ln \left( x\right) +  \frac{ \sin \left( x\right)}{ x} \cdot \left( x \right)' \right)$$
+ \newline 
+Заходит первоход на зоне в камеру. Чтобы проверить, насколько он смекалистый зеки ему задают загадку "Ты летишь на парашюте, справа - лес хуев, слева - море говна. Куда будешь садиться?". Первоход отвечает - \newline $$ \left( x \right)' = 1$$
+ \newline 
+Давай, дифференцируй, дифференцируй, мы же миллионеры. Ещё функций напридумываем.\newline $$ \left( \sin \left( x\right) \right)' =  \cos \left( x\right) \cdot  \left( x \right)'$$
+ \newline 
+Не опять, а снова! Для закрепления ещё раз посмотрим как решать этот пример. Берем его, и...\newline $$ \left( x \right)' = 1$$
+ \newline\text{Finaly:} $$
+ \left( \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)}\right) \cos \left( x\right) \right)'= $$ \newline $  \left( \frac{     x^{ \sin \left( x\right)}\cdot \left(   \cos \left( x\right) \ln \left( x\right)+ \frac{ \sin \left( x\right)}{ x}\right) \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)-   x^{ \sin \left( x\right)}\cdot \left( \frac{     4 \left(  3 x\right)^{ 3}\cdot  3\cdot   2^{ x}+  \left(  3 x\right)^{ 4}\cdot    2^{ x} \ln \left( 2\right)}{  \cos \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)^{ 2}}\right)}{  \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)^{ 2}}\right) \cos \left( x\right)+ \left( \frac{  x^{ \sin \left( x\right)}}{ \tan \left(  \left(  3 x\right)^{ 4}\cdot   2^{ x}\right)}\right)\left( - \sin \left( x\right)\right)$
+\end{document}
