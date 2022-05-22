@@ -79,7 +79,6 @@ namespace iLab
 		switch (data.type)
 		{
 		case TYPE_unknown:
-			stream << "Unknown";
 			break;
 		case TYPE_double_constant:
 			stream << data.value.double_value;
@@ -299,6 +298,12 @@ namespace iLab
 	node_t& operator*(node_t& node_left, node_t& node_right)
 	{
 		data_t new_data(TYPE_mul);
+		return *new node_t(new_data, &node_left, &node_right);
+	}
+
+	node_t& operator^(node_t& node_left, node_t& node_right)
+	{
+		data_t new_data(TYPE_deg);
 		return *new node_t(new_data, &node_left, &node_right);
 	}
 

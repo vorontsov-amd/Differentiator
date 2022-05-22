@@ -2,15 +2,20 @@
 #include "data_t.h"
 
 
-int GetN();
-int GetT();
-int GetE();
-int GetP();
-int GetG(const char* str);
+iLab::node_t* GetN();
+iLab::node_t* GetT();
+iLab::node_t* GetE();
+iLab::node_t* GetP();
+iLab::node_t* GetF();
+iLab::node_t* GetV();
+iLab::node_t* GetW();
+iLab::node_t* GetG(const char* str);
+int ReadFunc(iLab::type_t* n);
+int ReadVar(char* c);
 
 
 
-
+#define FUCK fprintf(stderr, "%d %s\n", __LINE__, __FUNCSIG__);
 
 
 
@@ -27,12 +32,17 @@ namespace iLab
 	node_t& ln(node_t& arg);
 	inline node_t& num(int number);
 	void CringeStr(std::ofstream& fin, std::ifstream& fout);
+	void Filesize(FILE* stream, size_t* filesize);
+	void ReadBuffer(char** buffer, FILE* stream);
+	int Filesize(std::ifstream& f);
+
 
 	
 	class DifferTree
 	{
 		friend DifferTree& DifferentiateTree(DifferTree& old);
 		friend DifferTree& DifferentiateTree(DifferTree& old_tree, std::ofstream& dumpfile);
+		friend void TreeRead(DifferTree& tree, char* str);
 
 
 		friend void TexDump(iLab::DifferTree& tree, iLab::DifferTree& dif_tree);
@@ -49,12 +59,17 @@ namespace iLab
 		DifferTree& Simple();
 
 		int Scan(const char* filename = "formula.txt");
+		int TreeScan(const char* filename = "formula.txt");
 		int Print();
 
 		void TexDump(const char* filename = "TexDump.tex");
 		void GraphDump(const char* graphname = "Dump");
 
 
+		node_t* Root()
+		{
+			return root;
+		}
 
 	private:
 		node_t* root;
@@ -63,7 +78,10 @@ namespace iLab
 		void Read(std::ifstream& file, node_t*& node, data_t& element);
 		void Write(std::ofstream& file, node_t* node);
 		void DumpNode(std::ofstream& dumpfile, const node_t* node);
-		void SimpleNode(node_t* node);
+		void SimpleNodeUniq(node_t* node, int* flag);
+		void SimpleNodeNum(node_t* node, int* flag);
+		void SwapSon(node_t* parrent);
+
 	};
 }
 

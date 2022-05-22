@@ -17,7 +17,7 @@ namespace iLab
 
 	enum type_t
 	{
-		TYPE_int_constant,
+		TYPE_int_constant = 1,
 		TYPE_double_constant,
 		TYPE_variable,
 		TYPE_sin,
@@ -122,6 +122,7 @@ namespace iLab
 		friend node_t& operator/(node_t& node_left, node_t& node_right);
 		friend node_t& operator^(node_t& node_left, int deg);
 		friend node_t& operator^(node_t& node_left, double deg);
+		friend node_t& operator^(node_t& node_left, node_t& node_right);
 
 
 
@@ -139,6 +140,16 @@ namespace iLab
 		operator data_t()
 		{
 			return data;
+		}
+
+		value_t value()
+		{
+			return data.value;
+		}
+
+		type_t type()
+		{
+			return data.type;
 		}
 
 	protected:

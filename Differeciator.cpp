@@ -418,6 +418,8 @@ namespace iLab
 			TextLg(dumpfile, node);
 			return dRight / (cRight * ln(num(10)));
 			break;
+		default: puts("ERROR UNKNOWN TYPE");
+			exit(0);
 		}
 	}
 
@@ -776,24 +778,216 @@ namespace iLab
 		return *new node_t(node);
 	}
 	
+#define NO_CHANGES (1)
+#define YE_CHANGES (0)
+
 	DifferTree& iLab::DifferTree::Simple()
 	{
-		SimpleNode(root);
+		int flag = NO_CHANGES;
+		do
+		{
+			flag = NO_CHANGES;
+			SimpleNodeUniq(root, &flag);
+			//SimpleNodeNum(root, &flag);
+		} while (flag != NO_CHANGES);
 		return *this;
 	}
 
-	void iLab::DifferTree::SimpleNode(node_t* node)
-	{
-		if (node->left)  if (node->left->left and node->left->right) SimpleNode(node->left);
-		if (node->right) if (node->right->left and node->right->right) SimpleNode(node->right);
+#define DATA_TYPE_IS_OPERATOR (node->data.type == TYPE_add or node->data.type == TYPE_sub or node->data.type == TYPE_mul or \
+	node->data.type == TYPE_div or node->data.type == TYPE_deg)
 
+#define RIGHT_TYPE_IS_OPERATOR (node->right->data.type == TYPE_add or node->right->data.type == TYPE_sub or \
+	node->right->data.type == TYPE_mul or node->right->data.type == TYPE_div or node->right->data.type == TYPE_deg)
+
+#define LEFT_TYPE_IS_OPERATOR (node->left->data.type == TYPE_add or node->left->data.type == TYPE_sub or \
+	node->left->data.type == TYPE_mul or node->left->data.type == TYPE_div or node->left->data.type == TYPE_deg)
+
+#define LEFT_TYPE_IS_NUM (node->left->data.type == TYPE_double_constant or node->left->data.type == TYPE_int_constant) 
+#define RIGHT_TYPE_IS_NUM (node->right->data.type == TYPE_double_constant or node->right->data.type == TYPE_int_constant) 
+
+#define RIGHT_LEFT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant or node->right->left->data.type == TYPE_double_constant)
+#define RIGHT_RIGHT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant or node->right->left->data.type == TYPE_double_constant)
+#define LEFT_RIGHT_TYPE_IS_NUM (node->left->right->data.type == TYPE_int_constant or node->left->right->data.type == TYPE_double_constant)
+#define LEFT_LEFT_TYPE_IS_NUM (node->left->left->data.type == TYPE_int_constant or node->left->left->data.type == TYPE_double_constant)
+
+
+#define VALUE (node->data.value.int_value)
+#define LEFT_VALUE (node->left->data.value.int_value)
+#define RIGHT_VALUE (node->right->data.value.int_value)
+#define RIGHT_LEFT_VALUE (node->right->left->data.value.int_value)
+#define RIGHT_RIGHT_VALUE (node->right->right->data.value.int_value)
+#define LEFT_LEFT_VALUE (node->left->left->data.value.int_value)
+#define LEFT_RIGHT_VALUE (node->left->right->data.value.int_value)
+
+
+	void iLab::DifferTree::SimpleNodeNum(node_t* node, int* flag)
+	{	
+
+		if (node->left) SimpleNodeNum(node->left, flag);
+		if (node->right) SimpleNodeNum(node->right, flag);
+	
+		if (node->left != nullptr)
+		{			
+			if (DATA_TYPE_IS_OPERATOR && LEFT_TYPE_IS_NUM && RIGHT_TYPE_IS_NUM)
+			{
+				switch (node->data.type)
+				{
+				case TYPE_mul: VALUE = LEFT_VALUE * RIGHT_VALUE; break;
+				case TYPE_sub: VALUE = LEFT_VALUE - RIGHT_VALUE; break;
+				case TYPE_add: VALUE = LEFT_VALUE + RIGHT_VALUE; break;
+				case TYPE_div: VALUE = LEFT_VALUE / RIGHT_VALUE; break;
+				case TYPE_deg: VALUE = (int)pow(LEFT_VALUE, RIGHT_VALUE); break;
+				}
+				node->data.type = TYPE_int_constant;
+				*flag = YE_CHANGES;
+				delete node->left;
+				node->left = nullptr;
+
+				delete node->right;
+				node->right = nullptr;
+			}
+			else if (node->right->left != nullptr)
+			{
+				if (DATA_TYPE_IS_OPERATOR && LEFT_TYPE_IS_NUM && RIGHT_TYPE_IS_OPERATOR && RIGHT_LEFT_TYPE_IS_NUM && node->data.type == node->right->data.type)
+				{
+					node_t* save = node->right->right;
+					switch (node->data.type)
+					{
+					case TYPE_mul: LEFT_VALUE = LEFT_VALUE * RIGHT_LEFT_VALUE;
+						delete node->right->left;
+						node->right->left = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					case TYPE_sub: LEFT_VALUE = LEFT_VALUE - RIGHT_LEFT_VALUE;
+						delete node->right->left;
+						node->right->left = nullptr;
+						delete node->right;
+						node->right = save;
+						node->data.type = TYPE_add;
+						break;
+					case TYPE_add: LEFT_VALUE = LEFT_VALUE + RIGHT_LEFT_VALUE;
+						delete node->right->left;
+						node->right->left = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					case TYPE_deg: LEFT_VALUE = LEFT_VALUE ^ RIGHT_LEFT_VALUE;
+						delete node->right->left;
+						node->right->left = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					default: break;
+					}
+					*flag = YE_CHANGES;
+				}
+				else if (DATA_TYPE_IS_OPERATOR && LEFT_TYPE_IS_NUM && RIGHT_TYPE_IS_OPERATOR && RIGHT_RIGHT_TYPE_IS_NUM && node->data.type == node->right->data.type)
+				{
+					node_t* save = node->right->right;
+					switch (node->data.type)
+					{
+					case TYPE_mul: LEFT_VALUE = LEFT_VALUE * RIGHT_RIGHT_VALUE;
+						delete node->right->right;
+						node->right->right = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					case TYPE_sub: LEFT_VALUE = LEFT_VALUE + RIGHT_RIGHT_VALUE;
+						delete node->right->right;
+						node->right->right = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					case TYPE_add: LEFT_VALUE = LEFT_VALUE + RIGHT_RIGHT_VALUE;
+						delete node->right->right;
+						node->right->right = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					default: break;
+					}
+					*flag = YE_CHANGES;
+				}
+			}
+			else if (node->left->left != nullptr)
+			{
+				if (DATA_TYPE_IS_OPERATOR && LEFT_TYPE_IS_OPERATOR && RIGHT_TYPE_IS_NUM && LEFT_RIGHT_TYPE_IS_NUM && node->data.type == node->left->data.type)
+				{
+					node_t* save = node->left->left;
+					switch (node->data.type)
+					{
+					case TYPE_mul: RIGHT_VALUE = RIGHT_VALUE * LEFT_RIGHT_VALUE;
+						delete node->left->right;
+						node->left->right = nullptr;
+						delete node->left;
+						node->left = save;
+						SwapSon(node);
+						break;
+					case TYPE_sub: RIGHT_VALUE = RIGHT_VALUE + LEFT_RIGHT_VALUE;
+						delete node->left->right;
+						node->left->right = nullptr;
+						delete node->left;
+						node->left = save;
+						break;
+					case TYPE_add: RIGHT_VALUE = RIGHT_VALUE + LEFT_RIGHT_VALUE;
+						delete node->left->right;
+						node->left->right = nullptr;
+						delete node->left;
+						node->left = save;
+						break;
+					default: break;
+					}
+					*flag = YE_CHANGES;
+				}
+				else if (DATA_TYPE_IS_OPERATOR && LEFT_TYPE_IS_OPERATOR && RIGHT_TYPE_IS_NUM && LEFT_LEFT_TYPE_IS_NUM && node->data.type == node->left->data.type)
+				{
+					node_t* save = node->left->right;
+					switch (node->data.type)
+					{
+					case TYPE_mul: RIGHT_VALUE = RIGHT_VALUE * LEFT_LEFT_VALUE;
+						delete node->left->left;
+						node->left->left = nullptr;
+						delete node->left;
+						node->left = save;
+						SwapSon(node);
+						break;
+					case TYPE_sub: LEFT_VALUE = LEFT_LEFT_VALUE - RIGHT_VALUE;
+						delete node->left->left;
+						node->left->left = nullptr;
+						delete node->right;
+						node->right = save;
+						break;
+					case TYPE_add: RIGHT_VALUE = RIGHT_VALUE + LEFT_LEFT_VALUE;
+						delete node->left->left;
+						node->left->left = nullptr;
+						delete node->left;
+						node->left = save;
+						break;
+					default: break;
+					}
+					*flag = YE_CHANGES;
+				}
+			}
+		}
+	}
+
+
+
+
+
+	void iLab::DifferTree::SimpleNodeUniq(node_t* node, int* flag)
+	{		
+		if (node->left) SimpleNodeUniq(node->left, flag);
+		if (node->right) SimpleNodeUniq(node->right, flag);
+		
 		node_t this_node = node;
-		if (node->left and node->right)
+		if (node->left != nullptr and node->right != nullptr)
 		{
 			switch (node->data.type)
 			{
 			case TYPE_mul:
-				if ((node->left->data == 0 and (node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant)))
+				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 0)
 				{
 					node->data.type = TYPE_int_constant;
 					node->data.value.int_value = 0;
@@ -801,8 +995,9 @@ namespace iLab
 					delete node->right;
 					node->left = nullptr;
 					node->right = nullptr;
+					*flag = YE_CHANGES;
 				}		
-				else if ((node->right->data == 0 and (node->right->data.type == TYPE_int_constant or node->right->data.type == TYPE_double_constant)))
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 0)
 				{
 					node->data.type = TYPE_int_constant;
 					node->data.value.int_value = 0;
@@ -810,76 +1005,145 @@ namespace iLab
 					delete node->right;
 					node->left = nullptr;
 					node->right = nullptr;
+					*flag = YE_CHANGES;
 				}
-				else if (node->left->data == 1 and (node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant))
+				else if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 1)
 				{
 					node->data.type = this_node.right->data.type;
 					node->data.value = this_node.right->data.value;
 					node->left = this_node.right->left;
 					node->right = this_node.right->right;
+					*flag = YE_CHANGES;
 				}
-				else if (node->right->data == 1 and (node->right->data.type == TYPE_int_constant or node->right->data.type == TYPE_double_constant))
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 1)
 				{
 					node->data.type = this_node.left->data.type;
 					node->data.value = this_node.left->data.value;
 					node->left = this_node.left->left;
 					node->right = this_node.left->right;
+					*flag = YE_CHANGES;
 				}
 				break;
 			case TYPE_add:
-				if ((node->left->data == 0 and (node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant)))
+				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 0)
 				{
 					node->data.type = this_node.right->data.type;
 					node->data.value = this_node.right->data.value;
 					node->left = this_node.right->left;
 					node->right = this_node.right->right;
+					*flag = YE_CHANGES;
 				}
-				else if ((node->right->data == 0 and (node->right->data.type == TYPE_int_constant or node->right->data.type == TYPE_double_constant)))
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 0)
 				{
 					node->data.type = this_node.left->data.type;
 					node->data.value = this_node.left->data.value;
 					node->left = this_node.left->left;
 					node->right = this_node.left->right;
+					*flag = YE_CHANGES;
 				}
 				break;
 			case TYPE_sub:
-				if ((node->left->data == 0 and (node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant)))
+				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 0)
 				{
 					delete node->left;
 					node->left = nullptr;
+					*flag = YE_CHANGES;
 				}
-				else if ((node->right->data == 0 and (node->right->data.type == TYPE_int_constant or node->right->data.type == TYPE_double_constant)))
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 0)
 				{
 					delete node->right;
 					node->right = nullptr;
+					*flag = YE_CHANGES;
+				}
+				else if (node->left->data.type == TYPE_variable and node->right->data.type == TYPE_variable
+					and node->left->data.value.char_value == node->right->data.value.char_value)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 0;
+					delete node->left;
+					delete node->right;
+					node->left = nullptr;
+					node->right = nullptr;
+					*flag = YE_CHANGES;
 				}
 				break;
 			case TYPE_deg:
-				if (node->left->data == 1 and (node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant))
+				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 1)
 				{
-					node->data.type = this_node.left->data.type;
-					node->data.value = this_node.left->data.value;
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 1;
+					delete node->left;
 					delete node->right;
+					node->left = nullptr;
 					node->right = nullptr;
-					node->left = this_node.left->left;
-					node->right = this_node.left->right;
+					*flag = YE_CHANGES;
 				}
-				else if (node->right->data == 1 and (node->right->data.type == TYPE_int_constant or node->right->data.type == TYPE_double_constant))
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 1)
 				{
 					node->data.type = this_node.left->data.type;
 					node->data.value = this_node.left->data.value;
 					node->left = this_node.left->left;
 					node->right = this_node.left->right;
+					*flag = YE_CHANGES;
+				}
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 0)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 1;
+					delete node->left;
+					delete node->right;
+					node->left = nullptr;
+					node->right = nullptr;
+					*flag = YE_CHANGES;
 				}
 				break;
+			case TYPE_div:
+				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 0)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 0;
+					delete node->left;
+					delete node->right;
+					node->left = nullptr;
+					node->right = nullptr;
+					*flag = YE_CHANGES;
+				}
+				else if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 1)
+				{
+					node->data.type = this_node.left->data.type;
+					node->data.value = this_node.left->data.value;
+					node->left = this_node.left->left;
+					node->right = this_node.left->right;
+					*flag = YE_CHANGES;
+				}
+
+				else if (node->left->data.type == TYPE_variable and node->right->data.type == TYPE_variable
+					and node->left->data.value.char_value == node->right->data.value.char_value)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 1;
+					delete node->left;
+					delete node->right;
+					node->left = nullptr;
+					node->right = nullptr;
+					*flag = YE_CHANGES;
+				}
 			default:
 				break;
 			}
 		}
 	}
 
+	void iLab::DifferTree::SwapSon(node_t* parrent)
+	{
+		node_t* node = new node_t(parrent->left);
+		parrent->left = parrent->right;
+		parrent->right = node;
+	}
+
 	void LabaMatan(DifferTree& tree)
 	{
+		tree.GraphDump();
 		std::ofstream dumpfile;
 		dumpfile.open("Laboratory work in math analys.tex");
 		Preamble(dumpfile);
@@ -889,9 +1153,11 @@ namespace iLab
 		dumpfile << "$ \n \\newline";
 
 		iLab::DifferTree dif_tree = iLab::DifferentiateTree(tree, dumpfile);
+		dif_tree.GraphDump("dtree");
 		dif_tree.Simple();
+		dif_tree.GraphDump("simple");
 
-		dumpfile << "\\text{Finaly:} $$\n";
+		dumpfile << "\\text{Finally:} $$\n";
 		TexDumpDiffNode(dumpfile, tree.root);
 		dumpfile << "= $$ \\newline $";
 		TexDumpTree(dumpfile, dif_tree.root);
@@ -899,8 +1165,6 @@ namespace iLab
 
 		dumpfile << "\\end{document}";
 		dumpfile.close();
-
-
 		system("pdflatex \"Laboratory work in math analys.tex\"");
 	}
 
@@ -930,8 +1194,7 @@ namespace iLab
 int main()
 {
 	iLab::DifferTree tree;
-	tree.Scan("formula.txt");
+	tree.TreeScan("formula.txt");
 	tree.GraphDump();
 	iLab::LabaMatan(tree);
-	std::cout << GetG("2+5*(7+3)$");
 }
