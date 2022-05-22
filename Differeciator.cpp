@@ -788,7 +788,7 @@ namespace iLab
 		{
 			flag = NO_CHANGES;
 			SimpleNodeUniq(root, &flag);
-			//SimpleNodeNum(root, &flag);
+			SimpleNodeNum(root, &flag);
 		} while (flag != NO_CHANGES);
 		return *this;
 	}
@@ -1041,6 +1041,13 @@ namespace iLab
 					node->right = this_node.left->right;
 					*flag = YE_CHANGES;
 				}
+				else if (node->right->data.type == TYPE_variable && node->left->data.type == TYPE_variable)
+				{
+					node->data.type = TYPE_mul;
+					node->left->data.type = TYPE_int_constant;
+					node->left->data.value.int_value = 2;
+					*flag = YE_CHANGES;
+				}
 				break;
 			case TYPE_sub:
 				if (node->left->data.type == TYPE_int_constant && node->left->data.value.int_value == 0)
@@ -1131,6 +1138,39 @@ namespace iLab
 			default:
 				break;
 			}
+		}
+		if (node->right != nullptr)
+		{
+			if (node->data.type == TYPE_ln)
+			{
+				if (node->right->data.type == TYPE_int_constant && node->right->data.value.int_value == 1)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 0;
+					delete node->right;
+					node->right = nullptr;
+					*flag = YE_CHANGES;
+				}
+			}
+			if (node->data.type == TYPE_lg)
+			{
+				if (node->left->data.value.int_value == 1)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 0;
+					delete node->left;
+					node->left = nullptr;
+					*flag = YE_CHANGES;
+				}
+				else if (node->left->data.value.int_value == 10)
+				{
+					node->data.type = TYPE_int_constant;
+					node->data.value.int_value = 1;
+					delete node->left;
+					node->left = nullptr;
+					*flag = YE_CHANGES;
+				}
+			}						
 		}
 	}
 

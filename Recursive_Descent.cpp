@@ -180,6 +180,11 @@ int ReadFunc(type_t* n)
 		p += 2;
 		*n = TYPE_lg;
 	}
+	else if (StrEqual(str, "ln"))
+	{
+		p += 2;
+		*n = TYPE_ln;
+	}
 	else if (StrEqual(str, "sh"))
 	{
 		p += 2;
