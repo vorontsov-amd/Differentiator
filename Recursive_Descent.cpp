@@ -8,7 +8,7 @@ node_t* GetN()
 	int val = 0;
 
 	int save_p = p;
-	while ('0' <= s[p] and s[p] <= '9')
+	while ('0' <= s[p] && s[p] <= '9')
 	{
 		val = val * 10 + (s[p] - '0');
 		p++;
@@ -22,7 +22,7 @@ node_t* GetT()
 {
 	node_t* val = GetW();
 
-	while (s[p] == '*' or s[p] == '/')
+	while (s[p] == '*' || s[p] == '/')
 	{
 		int op = s[p];
 		p++;
@@ -59,7 +59,7 @@ node_t* GetE()
 {
 	node_t* val = GetT();
 
-	while (s[p] == '+' or s[p] == '-')
+	while (s[p] == '+'|| s[p] == '-')
 	{
 		int op = s[p];
 		p++;
@@ -72,7 +72,7 @@ node_t* GetE()
 		else
 		{
 			data_t sub(TYPE_sub);
-			if (val->value().int_value == 0 and val->type() == TYPE_int_constant)
+			if (val->value().int_value == 0 && val->type() == TYPE_int_constant)
 			{
 				val = new node_t(sub, nullptr, val2);
 			}

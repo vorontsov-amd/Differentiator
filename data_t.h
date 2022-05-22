@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include <cmath>
 
 #define LOX printf("%d\n", __LINE__);
 
@@ -71,7 +72,7 @@ namespace iLab
 		{
 			if (num != 0)
 				return value.int_value == num;
-			else return value.int_value == 0 or value.double_value == 0.0;
+			else return value.int_value == 0 || value.double_value == 0.0;
 		}
 
 	private:

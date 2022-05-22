@@ -154,15 +154,15 @@ namespace iLab
 			dumpfile << "\\right)";
 			break;
 		case TYPE_deg:
-			if (node->left->data.type == TYPE_add or
-				node->left->data.type == TYPE_sub or
-				node->left->data.type == TYPE_mul or
+			if (node->left->data.type == TYPE_add ||
+				node->left->data.type == TYPE_sub ||
+				node->left->data.type == TYPE_mul ||
 				node->left->data.type == TYPE_div)
 				dumpfile << "\\left(";
 			if (node->left) TexDumpTree(dumpfile, node->left);
-			if (node->left->data.type == TYPE_add or
-				node->left->data.type == TYPE_sub or
-				node->left->data.type == TYPE_mul or
+			if (node->left->data.type == TYPE_add ||
+				node->left->data.type == TYPE_sub ||
+				node->left->data.type == TYPE_mul ||
 				node->left->data.type == TYPE_div)
 				dumpfile << "\\right)";
 			dumpfile << char(node->data.type);
@@ -171,19 +171,19 @@ namespace iLab
 			dumpfile << "}";
 			break;
 		case TYPE_mul:
-			if (node->left->data.type == TYPE_add or
-				node->left->data.type == TYPE_sub or
+			if (node->left->data.type == TYPE_add ||
+				node->left->data.type == TYPE_sub ||
 				node->left->data.type == TYPE_div)
 			{
 				dumpfile << "\\left(";
 				TexDumpTree(dumpfile, node->left);
 				dumpfile << "\\right)";
 			}
-			else if ((node->left->data.type > TYPE_coth or node->left->data.type < TYPE_sin) and
-				(node->right->data.type > TYPE_coth or node->right->data.type < TYPE_sin) and
-				not (((node->left->data.type == TYPE_int_constant) or (node->left->data.type == TYPE_double_constant)) 
-					and node->right->data.type == TYPE_variable)
-				and not ((node->left->data.type == TYPE_int_constant or node->left->data.type == TYPE_double_constant) and node->right->data.type == TYPE_deg))
+			else if ((node->left->data.type > TYPE_coth||node->left->data.type < TYPE_sin) &&
+				(node->right->data.type > TYPE_coth||node->right->data.type < TYPE_sin) &&
+				 !(((node->left->data.type == TYPE_int_constant)||(node->left->data.type == TYPE_double_constant)) 
+					&& node->right->data.type == TYPE_variable)
+				&& !((node->left->data.type == TYPE_int_constant||node->left->data.type == TYPE_double_constant)&&node->right->data.type == TYPE_deg))
 			{
 				TexDumpTree(dumpfile, node->left);
 				dumpfile << "\\cdot ";
@@ -191,8 +191,8 @@ namespace iLab
 			}
 			else TexDumpTree(dumpfile, node->left);
 
-			if (node->right->data.type == TYPE_add or
-				node->right->data.type == TYPE_sub or
+			if (node->right->data.type == TYPE_add ||
+				node->right->data.type == TYPE_sub ||
 				node->right->data.type == TYPE_div)
 			{
 				dumpfile << "\\left(";
@@ -313,7 +313,7 @@ namespace iLab
 
 #define is_int_power_function node.right->data.type == TYPE_int_constant
 #define is_double_power_function node.right->data.type == TYPE_double_constant
-#define is_exponencial_function node.left->data.type == TYPE_int_constant or node.left->data.type == TYPE_double_constant
+#define is_exponencial_function node.left->data.type == TYPE_int_constant||node.left->data.type == TYPE_double_constant
 
 	node_t& DifferentiateNode(node_t& node, std::ofstream& dumpfile, std::ifstream& cringe)
 	{
@@ -788,27 +788,27 @@ namespace iLab
 		{
 			flag = NO_CHANGES;
 			SimpleNodeUniq(root, &flag);
-			//SimpleNodeNum(root, &flag);
+			SimpleNodeNum(root, &flag);
 		} while (flag != NO_CHANGES);
 		return *this;
 	}
 
-#define DATA_TYPE_IS_OPERATOR (node->data.type == TYPE_add or node->data.type == TYPE_sub or node->data.type == TYPE_mul or \
-	node->data.type == TYPE_div or node->data.type == TYPE_deg)
+#define DATA_TYPE_IS_OPERATOR (node->data.type == TYPE_add||node->data.type == TYPE_sub||node->data.type == TYPE_mul||\
+	node->data.type == TYPE_div||node->data.type == TYPE_deg)
 
-#define RIGHT_TYPE_IS_OPERATOR (node->right->data.type == TYPE_add or node->right->data.type == TYPE_sub or \
-	node->right->data.type == TYPE_mul or node->right->data.type == TYPE_div or node->right->data.type == TYPE_deg)
+#define RIGHT_TYPE_IS_OPERATOR (node->right->data.type == TYPE_add||node->right->data.type == TYPE_sub||\
+	node->right->data.type == TYPE_mul||node->right->data.type == TYPE_div||node->right->data.type == TYPE_deg)
 
-#define LEFT_TYPE_IS_OPERATOR (node->left->data.type == TYPE_add or node->left->data.type == TYPE_sub or \
-	node->left->data.type == TYPE_mul or node->left->data.type == TYPE_div or node->left->data.type == TYPE_deg)
+#define LEFT_TYPE_IS_OPERATOR (node->left->data.type == TYPE_add||node->left->data.type == TYPE_sub||\
+	node->left->data.type == TYPE_mul||node->left->data.type == TYPE_div||node->left->data.type == TYPE_deg)
 
-#define LEFT_TYPE_IS_NUM (node->left->data.type == TYPE_double_constant or node->left->data.type == TYPE_int_constant) 
-#define RIGHT_TYPE_IS_NUM (node->right->data.type == TYPE_double_constant or node->right->data.type == TYPE_int_constant) 
+#define LEFT_TYPE_IS_NUM (node->left->data.type == TYPE_double_constant||node->left->data.type == TYPE_int_constant) 
+#define RIGHT_TYPE_IS_NUM (node->right->data.type == TYPE_double_constant||node->right->data.type == TYPE_int_constant) 
 
-#define RIGHT_LEFT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant or node->right->left->data.type == TYPE_double_constant)
-#define RIGHT_RIGHT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant or node->right->left->data.type == TYPE_double_constant)
-#define LEFT_RIGHT_TYPE_IS_NUM (node->left->right->data.type == TYPE_int_constant or node->left->right->data.type == TYPE_double_constant)
-#define LEFT_LEFT_TYPE_IS_NUM (node->left->left->data.type == TYPE_int_constant or node->left->left->data.type == TYPE_double_constant)
+#define RIGHT_LEFT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant||node->right->left->data.type == TYPE_double_constant)
+#define RIGHT_RIGHT_TYPE_IS_NUM (node->right->left->data.type == TYPE_int_constant||node->right->left->data.type == TYPE_double_constant)
+#define LEFT_RIGHT_TYPE_IS_NUM (node->left->right->data.type == TYPE_int_constant||node->left->right->data.type == TYPE_double_constant)
+#define LEFT_LEFT_TYPE_IS_NUM (node->left->left->data.type == TYPE_int_constant||node->left->left->data.type == TYPE_double_constant)
 
 
 #define VALUE (node->data.value.int_value)
@@ -981,8 +981,8 @@ namespace iLab
 		if (node->left) SimpleNodeUniq(node->left, flag);
 		if (node->right) SimpleNodeUniq(node->right, flag);
 		
-		node_t this_node = node;
-		if (node->left != nullptr and node->right != nullptr)
+		node_t this_node = CopyNode(*node);
+		if (node->left != nullptr&&node->right != nullptr)
 		{
 			switch (node->data.type)
 			{
@@ -1055,8 +1055,8 @@ namespace iLab
 					node->right = nullptr;
 					*flag = YE_CHANGES;
 				}
-				else if (node->left->data.type == TYPE_variable and node->right->data.type == TYPE_variable
-					and node->left->data.value.char_value == node->right->data.value.char_value)
+				else if (node->left->data.type == TYPE_variable&&node->right->data.type == TYPE_variable
+					&& node->left->data.value.char_value == node->right->data.value.char_value)
 				{
 					node->data.type = TYPE_int_constant;
 					node->data.value.int_value = 0;
@@ -1117,8 +1117,8 @@ namespace iLab
 					*flag = YE_CHANGES;
 				}
 
-				else if (node->left->data.type == TYPE_variable and node->right->data.type == TYPE_variable
-					and node->left->data.value.char_value == node->right->data.value.char_value)
+				else if (node->left->data.type == TYPE_variable && node->right->data.type == TYPE_variable
+					&& node->left->data.value.char_value == node->right->data.value.char_value)
 				{
 					node->data.type = TYPE_int_constant;
 					node->data.value.int_value = 1;
