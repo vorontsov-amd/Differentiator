@@ -1,6 +1,6 @@
-# Differencator
+# Differentiator
 
-Differencator is a C++ program that reads any mathematical function from a file and calculates its derivative. The output is presented in the form of a PDF file, which is designed as a mock lab work on Mathematical Analysis. The program also provides a GraphViz dump in the form of a tree with the original expression, differentiated expression and the simplified differentiated expression.
+Differentiator is a C++ program that reads any mathematical function from a file and calculates its derivative. The output is presented in the form of a PDF file, which is designed as a mock lab work on Mathematical Analysis. The program also provides a GraphViz dump in the form of a tree with the original expression, differentiated expression and the simplified differentiated expression.
 
 ## How to use
 
