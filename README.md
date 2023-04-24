@@ -76,6 +76,10 @@ A funnier version with prison jokes in previous commits.
 - GraphViz
 - LaTeX
 
+## Examples
+
+Look  `formula.txt` and `Laboratory work in math analys.pdf`
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/vorontsov-amd/Differencator/blob/main/LICENSE) file for more information.
